@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Intro - ChatApp</title>
+  <title>Intro - Qih</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font Orbitron -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
 
   <style>
@@ -33,13 +32,10 @@
     Qih
   </h1>
 
-  <!-- Deskripsi atau subtext (bisa kosong) -->
   <p class="text-gray-400 text-sm fade-in"></p>
 
-  <!-- Pesan error jika offline -->
   <div id="errorMsg" class="mt-6 text-red-400 hidden text-sm text-center">internet mana</div>
-
-  <!-- Firebase SDK -->
+  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
@@ -68,9 +64,8 @@
     errorMsg.classList.add("hidden");
     errorMsg.innerText = "";
     
-    // Pasang listener
     onAuthStateChanged(auth, async (user) => {
-      await new Promise(resolve => setTimeout(resolve, 2000)); // delay intro
+      await new Promise(resolve => setTimeout(resolve, 1100));
       
       if (user && user.emailVerified) {
         window.location.href = "home.html";
