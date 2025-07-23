@@ -5,7 +5,9 @@
   <title>Register - ChatApp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
+
+  <!-- Font Awesome CDN untuk ikon -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
 
   <style>
     .toast {
@@ -34,33 +36,35 @@
 </head>
 <body class="bg-gray-900 text-white flex flex-col min-h-screen">
 
+  <!-- Konten utama -->
   <main class="flex-grow flex flex-col items-center pt-16">
     <div class="bg-gray-800 px-6 py-8 rounded-xl w-[90%] max-w-sm">
-      <h2 class="text-2xl font-bold mb-6 text-center">Daftar Akun</h2>
+      <h2 class="text-2xl font-bold mb-6 text-center">orang pusing</h2>
 
       <input id="registerEmail" type="email" placeholder="Email" class="w-full p-3 mb-4 rounded bg-gray-700 border-none" />
       <input id="registerPassword" type="password" placeholder="Password" class="w-full p-3 mb-4 rounded bg-gray-700 border-none" />
 
       <button id="registerBtn" class="bg-blue-500 hover:bg-blue-600 w-full py-2 rounded">Daftar</button>
-      <button onclick="window.location.href='login.html'" class="mt-4 text-sm text-blue-400 hover:underline block w-full text-center">Sudah punya akun? Login!</button>
+      <button onclick="window.location.href='login.html'" class="mt-4 text-sm text-blue-400 hover:underline block w-full text-center">area login!</button>
     </div>
   </main>
 
   <div id="toastContainer"></div>
 
+  <!-- Footer -->
   <footer class="bg-gray-800 py-4 text-center">
-    <p class="text-sm text-gray-400 mb-2">ID Sosial:</p>
+    <p class="text-sm text-gray-400 mb-2">ID:</p>
     <div class="flex justify-center space-x-6 text-white text-2xl">
-      <a href="https://x.com/faqihhm_" target="_blank" aria-label="Twitter" class="hover:text-blue-400">
+      <a href="https://x.com/faqihhm_?t=HGzr5kANUbkjyzoib9-Erg&s=09" target="_blank" aria-label="Twitter" class="hover:text-blue-400 transition duration-300">
         <i class="fab fa-twitter"></i>
       </a>
-      <a href="https://www.instagram.com/qih_stark" target="_blank" aria-label="Instagram" class="hover:text-pink-400">
+      <a href="https://www.instagram.com/qih_stark?igsh=NjM3dWRxaWY4MWx6" target="_blank" aria-label="Instagram" class="hover:text-pink-400 transition duration-300">
         <i class="fab fa-instagram"></i>
       </a>
     </div>
   </footer>
 
-  <!-- Firebase Logic -->
+  <!-- Firebase Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import {
@@ -81,20 +85,20 @@
     } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBgZX_GKkekzJ8KwxLaAsZiDKm8moTuWAA",
-      authDomain: "room-chat-4f487.firebaseapp.com",
-      projectId: "room-chat-4f487",
-      storageBucket: "room-chat-4f487.appspot.com",
-      messagingSenderId: "429375918482",
-      appId: "1:429375918482:web:c52cbf150d45561024f14b"
-    };
+  apiKey: "AIzaSyBgZX_GKkekzJ8KwxLaAsZiDKm8moTuWAA",
+  authDomain: "room-chat-4f487.firebaseapp.com",
+  projectId: "room-chat-4f487",
+  storageBucket: "room-chat-4f487.appspot.com",
+  messagingSenderId: "429375918482",
+  appId: "1:429375918482:web:c52cbf150d45561024f14b"
+};
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const emailInput = document.getElementById("registerEmail");
-    const passwordInput = document.getElementById("registerPassword");
+    const registerEmail = document.getElementById("registerEmail");
+    const registerPassword = document.getElementById("registerPassword");
     const registerBtn = document.getElementById("registerBtn");
 
     function showToast(message) {
@@ -108,9 +112,9 @@
       }, 4000);
     }
 
-    registerBtn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
+    registerBtn.onclick = async () => {
+      const email = registerEmail.value.trim();
+      const password = registerPassword.value.trim();
 
       if (!email || !password) {
         showToast("Email dan password wajib diisi.");
@@ -120,46 +124,39 @@
       const username = email.split("@")[0].toLowerCase();
 
       try {
-        // Cek apakah username dari email sudah dipakai
         const q = query(collection(db, "users"), where("username", "==", username));
-        const snapshot = await getDocs(q);
-        if (!snapshot.empty) {
-          showToast("Username dari email sudah digunakan. Coba email lain.");
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          showToast("Username dari email sudah dipakai. Gunakan email lain.");
           return;
         }
 
-        // Buat akun baru
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Simpan data user di Firestore
         await setDoc(doc(db, "users", user.uid), {
           email: user.email,
           username: username
         });
 
-        // Kirim email verifikasi
         await sendEmailVerification(user);
-        showToast("Verifikasi email telah dikirim! Silakan cek email Anda.");
+        showToast("Verifikasi email telah dikirim. Silakan cek inbox Anda!");
 
-        // Logout dan arahkan ke login
         await signOut(auth);
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 2000);
+        window.location.href = "login.html";
 
       } catch (error) {
-        let msg = "Gagal daftar.";
+        let errorMsg = "Gagal daftar.";
         if (error.code === "auth/email-already-in-use") {
-          msg = "Email sudah terdaftar.";
+          errorMsg = "Email sudah terdaftar.";
         } else if (error.code === "auth/invalid-email") {
-          msg = "Format email salah.";
+          errorMsg = "Format email tidak valid.";
         } else if (error.code === "auth/weak-password") {
-          msg = "Password minimal 6 karakter.";
+          errorMsg = "Password minimal 6 karakter.";
         }
-        showToast(msg);
+        showToast(errorMsg);
       }
-    });
+    };
   </script>
 </body>
 </html>
