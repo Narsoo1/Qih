@@ -142,7 +142,7 @@
           return;
         }
 
-        window.location.href = "home.html";
+        window.location.replace("home.html");
       } catch (error) {
         let msg = "pw ente salah.";
         if (error.code === "auth/user-not-found") msg = "Email tidak ditemukan.";
