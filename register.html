@@ -61,8 +61,6 @@
       <a href="https://www.instagram.com/qih_stark?igsh=NjM3dWRxaWY4MWx6" target="_blank"><i class="fab fa-instagram"></i></a>
     </div>
   </footer>
-
-  <!-- Firebase Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import {
@@ -121,16 +119,17 @@
         });
 
         // Kirim link verifikasi ke verify.html
-        const actionCodeSettings = {
-          url: 'https://qihapp.vercel.app/verivikasi.html',
-          handleCodeInApp: true
-        };
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+const user = userCredential.user;
 
-        await sendEmailVerification(user, actionCodeSettings);
+await sendEmailVerification(user, {
+  url: 'https://qihapp.vercel.app/verivikasi.html',
+  handleCodeInApp: true
+});
 
-        showToast("Link verifikasi dikirim ke email kamu.");
+await deleteUser(user); 
+showToast("done silahkan login 🐈.");
         
-        // Logout & redirect
         setTimeout(async () => {
           await signOut(auth);
           window.location.replace("login.html?registered=true");
