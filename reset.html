@@ -124,7 +124,12 @@
       }
 
       try {
-        await sendPasswordResetEmail(auth, email);
+        const actionCodeSettings = {
+  url: 'https://room-chat-4f487.firebaseapp.com/ganti-password.html',
+  handleCodeInApp: true
+};
+
+await sendPasswordResetEmail(auth, email, actionCodeSettings);
         showToast("Link reset dikirim. Cek email!");
         setTimeout(() => {
           window.location.href = "index.html";
