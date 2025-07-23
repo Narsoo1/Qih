@@ -25,8 +25,6 @@
     .toast.show {
       opacity: 1;
     }
-
-    /* Hapus shadow kuning, biru, dan efek focus lainnya */
     input:focus {
       outline: none !important;
       box-shadow: none !important;
@@ -42,10 +40,10 @@
       <h2 class="text-2xl font-bold mb-6 text-center">orang pusing</h2>
 
       <input id="registerEmail" type="email" placeholder="Email"
-        class="w-full p-3 mb-4 rounded bg-gray-700 border-none focus:outline-none focus:ring-0 focus:border-none" />
+        class="w-full p-3 mb-4 rounded bg-gray-700 border-none" />
 
       <input id="registerPassword" type="password" placeholder="Password"
-        class="w-full p-3 mb-4 rounded bg-gray-700 border-none focus:outline-none focus:ring-0 focus:border-none" />
+        class="w-full p-3 mb-4 rounded bg-gray-700 border-none" />
 
       <button id="registerBtn" class="bg-blue-500 hover:bg-blue-600 w-full py-2 rounded">Daftar</button>
       <button onclick="window.location.href='login.html'"
@@ -116,14 +114,23 @@
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
+        // Simpan data user di Firestore
         await setDoc(doc(db, "users", user.uid), {
           email: user.email,
           username: email.split("@")[0].toLowerCase()
         });
 
-        await sendEmailVerification(user);
-        showToast("Verifikasi email dikirim. Silakan cek inbox.");
+        // Kirim link verifikasi ke verify.html
+        const actionCodeSettings = {
+          url: 'https://qihapp.vercel.app/verivikasi.html',
+          handleCodeInApp: true
+        };
 
+        await sendEmailVerification(user, actionCodeSettings);
+
+        showToast("Link verifikasi dikirim ke email kamu.");
+        
+        // Logout & redirect
         setTimeout(async () => {
           await signOut(auth);
           window.location.replace("login.html?registered=true");
