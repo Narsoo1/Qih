@@ -5,10 +5,7 @@
   <title>Verifikasi Email - ChatApp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Font Awesome untuk ikon sosial -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
-
   <style>
     .toast {
       position: fixed;
@@ -41,6 +38,9 @@
     <div class="bg-gray-800 px-6 py-8 rounded-xl w-[90%] max-w-sm text-center">
       <h2 class="text-2xl font-bold mb-4">Verifikasi Email</h2>
       <p id="verifyMsg" class="text-sm text-gray-300">Memeriksa status verifikasi...</p>
+      <div id="verifiedActions" class="mt-4 hidden">
+        <button onclick="window.location.href='login.html'" class="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Login Sekarang</button>
+      </div>
     </div>
   </main>
 
@@ -81,6 +81,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const oobCode = urlParams.get('oobCode');
     const msgEl = document.getElementById("verifyMsg");
+    const verifiedActions = document.getElementById("verifiedActions");
 
     function showToast(message) {
       const toast = document.createElement("div");
@@ -97,10 +98,8 @@
       applyActionCode(auth, oobCode)
         .then(() => {
           msgEl.innerText = "Email Anda berhasil diverifikasi!";
-          showToast("Berhasil verifikasi email. Mengarahkan ke halaman login...");
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 1000);
+          showToast("Berhasil verifikasi email. Silakan login.");
+          verifiedActions.classList.remove("hidden");
         })
         .catch(() => {
           msgEl.innerText = "Link verifikasi tidak valid atau sudah kadaluarsa.";
