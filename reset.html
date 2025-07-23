@@ -125,10 +125,9 @@
 
       try {
         const actionCodeSettings = {
-  url: 'https://qihapp.vercel.app/',
+  url: 'https://qihapp.vercel.app/password.html',
   handleCodeInApp: true
 };
-
 await sendPasswordResetEmail(auth, email, actionCodeSettings);
         showToast("Link reset dikirim. Cek email!");
         setTimeout(() => {
