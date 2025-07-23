@@ -233,7 +233,7 @@ if (data.timestamp?.toDate) {
 
     onAuthStateChanged(auth, async user => {
       if (!user || !user.emailVerified) {
-        location.href = "index.html";
+        location.href = "login.html";
         return;
       }
 
