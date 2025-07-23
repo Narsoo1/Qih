@@ -58,9 +58,9 @@
 
     const errorMsg = document.getElementById('errorMsg');
 
-    function redirectIfConnected() {
+    window.onload = async () => {
       if (!navigator.onLine) {
-        errorMsg.innerText = "internet akfifkan king.";
+        errorMsg.innerText = "Internet aktifkan king.";
         errorMsg.classList.remove("hidden");
         return;
       }
@@ -68,20 +68,18 @@
       errorMsg.classList.add("hidden");
       errorMsg.innerText = "";
 
+      // Delay 2 detik biar intro terlihat
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
       onAuthStateChanged(auth, (user) => {
-        setTimeout(() => {
-          if (user && user.emailVerified) {
-            window.location.href = "home.html";
-          } else {
-            window.location.href = "index.html";
-          }
-        }, 2000); // Delay 2 detik biar intro kelihatan dulu
+        if (user && user.emailVerified) {
+          window.location.href = "home.html";
+        } else {
+          window.location.href = "index.html";
+        }
       });
-    }
+    };
 
-    window.onload = redirectIfConnected;
-
-    window.addEventListener("online", redirectIfConnected);
     window.addEventListener("offline", () => {
       errorMsg.innerText = "Tidak ada koneksi internet.";
       errorMsg.classList.remove("hidden");
