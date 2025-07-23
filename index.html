@@ -144,5 +144,13 @@
       }
     });
   </script>
+  <script>
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get("mode");
+
+  if (mode === "resetPassword") {
+    window.location.href = `/password.html?${window.location.search.slice(1)}`;
+  }
+</script>
 </body>
 </html>
